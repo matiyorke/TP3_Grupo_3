@@ -1,4 +1,4 @@
-package dao;
+package entidad;
 
 import java.sql.Statement;
 
@@ -18,10 +18,27 @@ public class DaoProducto {
 		
 	}
 
-	//*** Dar de alta un producto utilizando un SP ***//
+//se HACE CON EL SP 
 	
 	public int bajaProducto(String codigo) {
 		String query = "delete from productos where Codigo='"+codigo+"'";
+		
+		Connection cn = null;
+		int filas = 0;
+		
+		try 
+		{
+			cn = DriverManager.getConnection(host+dbName,user,pass);
+			Statement st = cn.createStatement();
+			filas = st.executeUpdate(query);
+		} 
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return filas;
+	}
+	public int modificarProducto(Producto producto) {
+		String query = "update productos set Nombre='"+producto.getNombre()+"', Precio='"+producto.getPrecio()+"', Stock='"+producto.getStock()+"', IdCategoria='"+producto.getIdCategoria()+"' where Codigo='"+producto.getCodigo()+"'";
 		
 		Connection cn = null;
 		int filas = 0;
