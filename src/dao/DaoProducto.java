@@ -1,4 +1,4 @@
-package entidad;
+package dao;
 
 import java.sql.Statement;
 
