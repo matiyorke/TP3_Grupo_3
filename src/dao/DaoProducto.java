@@ -1,10 +1,14 @@
 package dao;
 
 import java.sql.Statement;
+import java.util.ArrayList;
+
+import entidad.Categoria;
 import entidad.Producto;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 
 public class DaoProducto {
 	
@@ -71,6 +75,59 @@ public class DaoProducto {
 			e.printStackTrace();
 		}
 		return filas;
+	}
+	
+	public Producto ObtenerProducto(String codigo)
+	{
+		Producto x= new Producto();
+		Connection cn = null;
+		try {
+			cn = DriverManager.getConnection(host+dbName,user,pass);
+			Statement st = cn.createStatement();
+			String query = "Select * from productos where Codigo='"+codigo+"'";
+			ResultSet rs = st.executeQuery(query);
+			rs.next();
+			x.setCodigo(rs.getString("Codigo"));
+			x.setNombre(rs.getString("Nombre"));
+			x.setPrecio(rs.getDouble("Precio"));
+			x.setStock(rs.getInt("Stock"));
+			x.setIdCategoria(rs.getInt("IdCategoria"));
+		}
+		catch(Exception e) 
+		{
+			e.printStackTrace();
+		}
+		return x;
+		
+	}
+	
+	public ArrayList<Producto> obtenerTodosLosProductos()
+	{
+		ArrayList<Producto> lProducto = new ArrayList<Producto>();
+		Connection cn = null;
+
+		try{
+			cn = DriverManager.getConnection(host+dbName,user,pass);
+			Statement st = cn.createStatement();
+			String query = "Select * from Productos";
+			ResultSet rs = st.executeQuery(query);
+			while(rs.next())
+			{
+				Producto x = new Producto();
+				x.setCodigo(rs.getString("Codigo"));
+				x.setNombre(rs.getString("Nombre"));
+				x.setPrecio(rs.getDouble("Precio"));
+				x.setStock(rs.getInt("Stock"));
+				x.setIdCategoria(rs.getInt("IdCategoria"));
+				lProducto.add(x);
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		return lProducto;
 	}
 	
 	
