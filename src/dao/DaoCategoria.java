@@ -2,7 +2,9 @@ package dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import entidad.Categoria;
 
@@ -70,4 +72,56 @@ public class DaoCategoria {
 			}
 			return filas;
 		}
+	 
+	 public Categoria obtenerCategoria(int id) {
+		 Categoria x = new Categoria();
+		 
+		 Connection cn = null;
+		 
+		 try 
+		 {
+			 cn = DriverManager.getConnection(host+dbName,user,pass);
+			 Statement st = cn.createStatement();
+			 String query = "Select * from Categorias where IdCategoria="+id;
+			 ResultSet rs = st.executeQuery(query);
+			 rs.next();
+			 x.setNombre(rs.getString("Nombre"));
+			 x.setIdCategoria(rs.getInt("IdCategoria"));
+		 }
+		 catch (Exception e) 
+		 {
+				e.printStackTrace();
+		 }
+		 
+		 return x;
+	 }
+	 
+	 public ArrayList<Categoria> obtenerTodasLasCategorias() 
+	 {
+		 ArrayList<Categoria> lCategoria = new ArrayList<Categoria>();
+		 
+		 Connection cn = null;
+		 
+		 try 
+		 {
+			 cn = DriverManager.getConnection(host+dbName,user,pass);
+			 String query = "Select * from Categorias";
+			 Statement st = cn.createStatement();
+			 ResultSet rs = st.executeQuery(query);
+			 while(rs.next()) 
+			 {
+				Categoria x = new Categoria();
+				x.setIdCategoria(rs.getInt("IdCategoria"));
+				x.setNombre(rs.getString("Nombre"));
+				lCategoria.add(x);
+			 }
+			 
+		 }
+		 catch (Exception e) 
+		 {
+				e.printStackTrace();
+		 }
+		 
+		 return lCategoria;
+	 }
 }
